@@ -1,4 +1,5 @@
 /// <reference types='vite/client' />
+/// <reference types='vitest' />
 
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -12,4 +13,8 @@ export default defineConfig({
     port: 8081,
     allowedHosts:[ 'd310n6l00nl5i9.cloudfront.net']
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+  },  
 })
