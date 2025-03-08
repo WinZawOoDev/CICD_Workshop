@@ -4,7 +4,12 @@ import { PipelineCdkStack } from '../lib/pipeline-cdk-stack'
 import { EcrCdkStack } from '../lib/ecr-cdk-stack';
 
 const app = new cdk.App();
-const testCdkStack = new AppCdkStack(app, 'test', {});
+
+const ecrCdkStack = new EcrCdkStack(app, 'ecr-stack', {});
+
+const testCdkStack = new AppCdkStack(app, 'test', {
+    ecrRepository: ecrCdkStack.repository,
+  });
 
 // new AppCdkStack(app, 'AppCdkStack', {
 //   /* If you don't specify 'env', this stack will be environment-agnostic.
@@ -22,7 +27,6 @@ const testCdkStack = new AppCdkStack(app, 'test', {});
 //   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 // });
 
-const ecrCdkStack = new EcrCdkStack(app, 'ecr-stack', {});
 const pipelineCdkStack = new PipelineCdkStack(app, 'pipeline-stack', {
     ecrRepository: ecrCdkStack.repository,
 });
