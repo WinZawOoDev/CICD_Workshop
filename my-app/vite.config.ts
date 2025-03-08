@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     host: true,
     port: 8081,
-    allowedHosts:[ 'd310n6l00nl5i9.cloudfront.net']
+    allowedHosts:[ 'd310n6l00nl5i9.cloudfront.net', 'test-a-testF-4lO03dzcTsS6-1948040656.us-east-2.elb.amazonaws.com']
   },
   test: {
     globals: true,
