@@ -21,7 +21,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>CI/CD Test</p>
+        <p>CI/CD Test & Prod Environment</p>
       </div>
     </>
   )
