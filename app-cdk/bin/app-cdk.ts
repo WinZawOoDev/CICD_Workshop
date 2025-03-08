@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { AppCdkStack } from '../lib/app-cdk-stack';
 import { PipelineCdkStack } from '../lib/pipeline-cdk-stack'
+import { EcrCdkStack } from '../lib/ecr-cdk-stack';
 
 const app = new cdk.App();
 const testCdkStack = new AppCdkStack(app, 'test', {});
@@ -21,4 +22,7 @@ const testCdkStack = new AppCdkStack(app, 'test', {});
 //   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 // });
 
-const pipelineCdkStack = new PipelineCdkStack(app, 'pipeline-stack', {});
+const ecrCdkStack = new EcrCdkStack(app, 'ecr-stack', {});
+const pipelineCdkStack = new PipelineCdkStack(app, 'pipeline-stack', {
+    ecrRepository: ecrCdkStack.repository,
+});
