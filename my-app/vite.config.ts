@@ -11,7 +11,10 @@ export default defineConfig({
   server: {
     host: true,
     port: 8081,
-    allowedHosts: ['test-a-testf-4lo03dzctss6-1948040656.us-east-2.elb.amazonaws.com'],
+    allowedHosts: [
+      'test-a-testf-4lo03dzctss6-1948040656.us-east-2.elb.amazonaws.com',
+      'prod-a-prodf-ti343dvhngwo-578129785.us-east-2.elb.amazonaws.com'
+    ],
   },
   test: {
     globals: true,

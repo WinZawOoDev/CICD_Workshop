@@ -23,9 +23,6 @@ function App() {
         </button>
         <p>CI/CD Test</p>
       </div>
-      <p className="read-the-docs">
-        PULL REQUEST TEST
-      </p>
     </>
   )
 }
