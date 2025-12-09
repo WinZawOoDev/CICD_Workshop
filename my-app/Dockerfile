@@ -5,7 +5,7 @@ WORKDIR /app
 
 USER node
 
-# Dependencies stage
+# Dependencies stage - installs all dependencies for build stage
 FROM base AS dependencies
 
 COPY --chown=node:node package.json package-lock.json* ./

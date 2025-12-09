@@ -1,4 +1,4 @@
-import { Stack, StackProps, aws_codeconnections as codeconnections, CfnOutput, Duration } from 'aws-cdk-lib';
+import { Stack, StackProps, aws_codeconnections as codeconnections, CfnOutput, Duration, Arn } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
@@ -153,7 +153,12 @@ export class PipelineCdkStack extends Stack {
         const signerPolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             resources: [
-                `arn:aws:signer:${this.region}:${this.account}:/signing-profiles/*`
+                Arn.format({
+                    service: 'signer',
+                    resource: '/signing-profiles/*',
+                    region: this.region,
+                    account: this.account,
+                }, this)
             ],
             actions: [
                 'signer:PutSigningProfile',
