@@ -22,7 +22,7 @@ RUN npm run build
 # Production stage
 FROM base AS production
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 COPY --chown=node:node package.json package-lock.json* ./
 COPY --chown=node:node --from=dependencies /tmp/prod_node_modules ./node_modules
@@ -34,7 +34,7 @@ CMD [ "npm", "run", "preview" ]
 # Development stage
 FROM base AS development
 
-ENV NODE_ENV development
+ENV NODE_ENV=development
 
 COPY --chown=node:node package.json package-lock.json* ./
 RUN npm install
