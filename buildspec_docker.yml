@@ -12,10 +12,15 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $IMAGE_REPO_URI
-      - echo Downloading AWS Signer and Notation CLI
-      - wget https://d2hvyiie56hcat.cloudfront.net/linux/amd64/installer/deb/latest/aws-signer-notation-cli_amd64.deb
-      - echo Installing AWS Signer and Notation CLI
-      - sudo dpkg -i -E aws-signer-notation-cli_amd64.deb
+      - |
+        if ! command -v notation &> /dev/null; then
+          echo Downloading AWS Signer and Notation CLI
+          wget https://d2hvyiie56hcat.cloudfront.net/linux/amd64/installer/deb/latest/aws-signer-notation-cli_amd64.deb
+          echo Installing AWS Signer and Notation CLI
+          sudo dpkg -i -E aws-signer-notation-cli_amd64.deb
+        else
+          echo AWS Signer and Notation CLI already installed
+        fi
       - notation version
   build:
     commands:

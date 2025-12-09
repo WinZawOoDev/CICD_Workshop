@@ -1,4 +1,4 @@
-import { Stack, StackProps, aws_codeconnections as codeconnections, CfnOutput, Duration } from 'aws-cdk-lib';
+import { Stack, StackProps, aws_codeconnections as codeconnections, CfnOutput, Duration, Arn } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
@@ -97,9 +97,8 @@ export class PipelineCdkStack extends Stack {
 
         const dockerBuildRolePolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
-            resources: ['*'],
+            resources: [props.ecrRepository.repositoryArn],
             actions: [
-                'ecr:GetAuthorizationToken',
                 'ecr:BatchCheckLayerAvailability',
                 'ecr:GetDownloadUrlForLayer',
                 'ecr:GetRepositoryPolicy',
@@ -114,7 +113,15 @@ export class PipelineCdkStack extends Stack {
             ],
         });
 
+        // ECR authorization token requires wildcard resource
+        const ecrAuthPolicy = new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            resources: ['*'],
+            actions: ['ecr:GetAuthorizationToken'],
+        });
+
         dockerBuild.addToRolePolicy(dockerBuildRolePolicy);
+        dockerBuild.addToRolePolicy(ecrAuthPolicy);
 
         const dockerBuildOutput = new codepipeline.Artifact();
 
@@ -145,7 +152,14 @@ export class PipelineCdkStack extends Stack {
 
         const signerPolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
-            resources: ['*'],
+            resources: [
+                Arn.format({
+                    service: 'signer',
+                    resource: '/signing-profiles/*',
+                    region: this.region,
+                    account: this.account,
+                }, this)
+            ],
             actions: [
                 'signer:PutSigningProfile',
                 'signer:SignPayload',
