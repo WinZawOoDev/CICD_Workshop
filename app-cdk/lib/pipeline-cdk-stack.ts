@@ -97,7 +97,7 @@ export class PipelineCdkStack extends Stack {
 
         const dockerBuildRolePolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
-            resources: ['*'],
+            resources: [props.ecrRepository.repositoryArn],
             actions: [
                 'ecr:GetAuthorizationToken',
                 'ecr:BatchCheckLayerAvailability',
@@ -114,7 +114,15 @@ export class PipelineCdkStack extends Stack {
             ],
         });
 
+        // ECR authorization token requires wildcard resource
+        const ecrAuthPolicy = new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            resources: ['*'],
+            actions: ['ecr:GetAuthorizationToken'],
+        });
+
         dockerBuild.addToRolePolicy(dockerBuildRolePolicy);
+        dockerBuild.addToRolePolicy(ecrAuthPolicy);
 
         const dockerBuildOutput = new codepipeline.Artifact();
 
@@ -145,7 +153,9 @@ export class PipelineCdkStack extends Stack {
 
         const signerPolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
-            resources: ['*'],
+            resources: [
+                `arn:aws:signer:${process.env.CDK_DEFAULT_REGION}:${process.env.CDK_DEFAULT_ACCOUNT}:/signing-profiles/*`
+            ],
             actions: [
                 'signer:PutSigningProfile',
                 'signer:SignPayload',

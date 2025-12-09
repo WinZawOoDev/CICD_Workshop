@@ -49,14 +49,6 @@ export class AppCdkStack extends Stack {
         }
       );
 
-      this.fargateService.targetGroup.configureHealthCheck({
-        healthyThresholdCount: 2,
-        unhealthyThresholdCount: 2,
-        timeout: Duration.seconds(10),
-        interval: Duration.seconds(11),
-        path: "/my-app",
-      });
-
       this.greenLoadBalancerListener = this.fargateService.loadBalancer.addListener(`${id}-GreenLoadBalancerListener`, { port: 81, protocol: elbv2.ApplicationProtocol.HTTP });
       this.greenTargetGroup = new elbv2.ApplicationTargetGroup(this, `${id}-GreenTargetGroup`, {
         port: 80,
@@ -89,6 +81,7 @@ export class AppCdkStack extends Stack {
 
     }
 
+    // Configure health check once for both test and prod
     this.fargateService.targetGroup.configureHealthCheck(
       {
         timeout: Duration.seconds(10),
