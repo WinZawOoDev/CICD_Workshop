@@ -99,7 +99,6 @@ export class PipelineCdkStack extends Stack {
             effect: iam.Effect.ALLOW,
             resources: [props.ecrRepository.repositoryArn],
             actions: [
-                'ecr:GetAuthorizationToken',
                 'ecr:BatchCheckLayerAvailability',
                 'ecr:GetDownloadUrlForLayer',
                 'ecr:GetRepositoryPolicy',
