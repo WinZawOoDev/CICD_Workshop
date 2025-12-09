@@ -154,7 +154,7 @@ export class PipelineCdkStack extends Stack {
         const signerPolicy = new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             resources: [
-                `arn:aws:signer:${process.env.CDK_DEFAULT_REGION}:${process.env.CDK_DEFAULT_ACCOUNT}:/signing-profiles/*`
+                `arn:aws:signer:${this.region}:${this.account}:/signing-profiles/*`
             ],
             actions: [
                 'signer:PutSigningProfile',

@@ -9,9 +9,7 @@ USER node
 FROM base AS dependencies
 
 COPY --chown=node:node package.json package-lock.json* ./
-RUN npm ci --only=production && \
-    cp -R node_modules /tmp/prod_node_modules && \
-    npm ci
+RUN npm ci
 
 # Build stage
 FROM dependencies AS build
@@ -25,7 +23,7 @@ FROM base AS production
 ENV NODE_ENV=production
 
 COPY --chown=node:node package.json package-lock.json* ./
-COPY --chown=node:node --from=dependencies /tmp/prod_node_modules ./node_modules
+RUN npm ci --omit=dev
 COPY --chown=node:node --from=build /app/dist ./dist
 
 EXPOSE 8081
